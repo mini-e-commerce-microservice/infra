@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  zipkin-all-in-one:
+    image: openzipkin/zipkin:latest
+    environment:
+      - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+ExitOnOutOfMemoryError
+    restart: always
+    ports:
+      - "9411:9411"
+    networks:
+      - mini-ecommerce-otel-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    restart: always
+    command: [ "--config=/providerconf/otel-config.yaml", "${OTELCOL_ARGS}" ]
+    volumes:
+      - "./otel-config:/providerconf"
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "55679:55679" # zpages extension
+    environment:
+      - OTEL_EXPORTER_OTLP_CLIENT_KEY=askdhuiqenfnasasdjuefhjaksdan
+      - OTEL_EXPORTER_OTLP_TRACES_CLIENT_KEY=anksbfjahdhajsdyefbahjsd
+      - BASIC_AUTH_USERNAME=user
+      - BASIC_AUTH_PASSWORD=pw
+    depends_on:
+      - zipkin-all-in-one
+    networks:
+      - mini-ecommerce-otel-network
+
+networks:
+  mini-ecommerce-otel-network:

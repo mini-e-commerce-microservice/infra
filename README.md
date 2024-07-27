@@ -17,6 +17,10 @@ This document provides an overview of the infrastructure setup for your project,
 1. port rabbitmq server 5672
 2. port rabbitmq ui 15672
 
+### otel and zipkin
+1. otel port grpc client 4137
+2. zipkin ui 9411
+
 ## service configurations
 
 ### user service

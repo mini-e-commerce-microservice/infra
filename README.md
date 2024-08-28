@@ -32,3 +32,7 @@ This document provides an overview of the infrastructure setup for your project,
 ### kafka
 
 ### rabbitmq
+#### Exchange and Queue Structure
+- **Exchange**: `notifications` (Type: `direct`)
+    - **Routing Key**: `notification.email.otp`
+        - **Queue**: `email_otp`

@@ -31,20 +31,20 @@ run-minio:
 	docker compose -f minio.yml up -d
 
 stop-minio:
-	docker compose -f minio.yml down
+	docker compose -f minio.yml stop
 
 stop-kafka:
-	docker compose -f kafka.yml down
+	docker compose -f kafka.yml stop
 run-kafka:
 	docker compose -f kafka.yml up -d
 
 stop-otel:
-	docker compose -f otel.yml down
+	docker compose -f otel.yml stop
 run-otel:
 	docker compose -f otel.yml up -d
 
 stop-rabbitmq:
-	docker compose -f rabbitmq.yml down
+	docker compose -f rabbitmq.yml stop
 run-rabbitmq:
 	docker compose -f rabbitmq.yml up -d
 

@@ -9,8 +9,8 @@ resource "rabbitmq_exchange" "notifications" {
   }
 }
 
-resource "rabbitmq_queue" "email_otp" {
-  name  = "email_otp"
+resource "rabbitmq_queue" "notification_type_email" {
+  name  = "notification_type_email"
   vhost = "/"
 
   settings {
@@ -19,10 +19,10 @@ resource "rabbitmq_queue" "email_otp" {
   }
 }
 
-resource "rabbitmq_binding" "notification_email_otp" {
+resource "rabbitmq_binding" "notification_email" {
   source           = rabbitmq_exchange.notifications.name
   vhost            = "/"
-  destination      = rabbitmq_queue.email_otp.name
+  destination      = rabbitmq_queue.notification_type_email.name
   destination_type = "queue"
-  routing_key      = "notification.email.otp"
+  routing_key      = "notification.type.email"
 }

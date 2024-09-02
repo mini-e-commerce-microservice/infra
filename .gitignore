@@ -1,5 +1,5 @@
-terraform.tfstate
-terraform.tfstate.backup
-.terraform
+tf/terraform.tfstate
+tf/terraform.tfstate.backup
+tf/.terraform
 .idea
 .vscode

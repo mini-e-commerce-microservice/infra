@@ -12,6 +12,10 @@ exporters:
   zipkin:
     endpoint: "http://zipkin-all-in-one:9411/api/v2/spans"
     format: proto
+  otlp:
+    endpoint: "https://otlp.nr-data.net:4318"
+    headers:
+      api-key: "5add436a67e5712f1cc01084eb2f952dFFFFNRAL"
 
 processors:
   batch:
@@ -33,7 +37,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug,zipkin]
+      exporters: [debug,zipkin,otlp]
     metrics:
       receivers: [otlp]
       processors: [batch]

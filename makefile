@@ -1,8 +1,8 @@
 CONFIG_FILE=/etc/kafka/kafka-config/config.properties
 
-BOOTSTRAP_SERVER=localhost:9093
+BOOTSTRAP_SERVER=localhost:8003
 
-TOPIC_NAME=test
+TOPIC_NAME=testtopic
 
 REPLICATION_FACTOR=1
 

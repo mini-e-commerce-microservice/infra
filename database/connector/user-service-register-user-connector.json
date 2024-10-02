@@ -1,0 +1,11 @@
+{
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "user_svc",
+    "database.port": "5432",
+    "database.user": "user_svc_user",
+    "database.password": "user_svc",
+    "database.dbname": "user_svc_db",
+    "topic.prefix": "usersvc",
+    "schema.include.list": "public",
+    "table.include.list": "public.users"
+}

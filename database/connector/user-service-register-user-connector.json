@@ -7,5 +7,9 @@
     "database.dbname": "user_svc_db",
     "topic.prefix": "usersvc",
     "schema.include.list": "public",
-    "table.include.list": "public.users"
+    "table.include.list": "public.users",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.add.headers": "db,after.trace_parent:traceparent",
+    "transforms.unwrap.add.headers.prefix": ""
 }

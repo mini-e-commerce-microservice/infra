@@ -49,6 +49,6 @@ run-rabbitmq:
 	docker compose -f rabbitmq.yml up -d
 
 
-run: run-kafka run-otel run-rabbitmq run-minio
+run: run-otel run-rabbitmq run-minio
 
 stop: stop-kafka stop-otel stop-rabbitmq stop-minio

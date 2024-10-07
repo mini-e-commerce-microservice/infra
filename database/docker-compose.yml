@@ -79,8 +79,28 @@ services:
       - user_svc_db_data:/var/lib/postgresql/data
     networks:
       - mini-ecommerce-db-network
+  
+  auth_svc:
+    image: debezium/postgres:16-alpine
+    restart: always
+    ports:
+      - 5434:5432
+    healthcheck:
+      test: "pg_isready -U auth_svc_user -d auth_svc_db"
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    environment:
+      POSTGRES_DB: auth_svc_db
+      POSTGRES_USER: auth_svc_user
+      POSTGRES_PASSWORD: auth_svc
+    volumes:
+      - auth_svc_db_data:/var/lib/postgresql/data
+    networks:
+      - mini-ecommerce-db-network
 volumes:
   user_svc_db_data:
+  auth_svc_db_data:
 
 networks:
   mini-ecommerce-db-network:

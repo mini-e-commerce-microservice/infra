@@ -53,6 +53,11 @@ stop-redis:
 run-redis:
 	docker compose -f redis.yml up -d
 
-run: run-otel run-rabbitmq run-minio run-redis
+stop-vault:
+	docker compose -f vault.yml stop
+run-vault:
+	docker compose -f vault.yml up -d
 
-stop: stop-kafka stop-otel stop-rabbitmq stop-minio stop-redis
+run: run-otel run-rabbitmq run-minio run-redis run-vault
+
+stop: stop-kafka stop-otel stop-rabbitmq stop-minio stop-redis stop-vault

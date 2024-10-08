@@ -4,3 +4,4 @@ tf/.terraform
 .idea
 .vscode
 redis-data
+secret.txt

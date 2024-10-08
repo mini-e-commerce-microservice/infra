@@ -48,7 +48,11 @@ stop-rabbitmq:
 run-rabbitmq:
 	docker compose -f rabbitmq.yml up -d
 
+stop-redis:
+	docker compose -f redis.yml stop
+run-redis:
+	docker compose -f redis.yml up -d
 
-run: run-otel run-rabbitmq run-minio
+run: run-otel run-rabbitmq run-minio run-redis
 
-stop: stop-kafka stop-otel stop-rabbitmq stop-minio
+stop: stop-kafka stop-otel stop-rabbitmq stop-minio stop-redis

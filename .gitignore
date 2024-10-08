@@ -3,3 +3,4 @@ tf/terraform.tfstate.backup
 tf/.terraform
 .idea
 .vscode
+redis-data

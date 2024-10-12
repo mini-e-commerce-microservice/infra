@@ -11,6 +11,12 @@ terraform {
   }
 }
 
+variable "VAULT_ROOT_TOKEN" {
+  type = string
+  description = "The Vault root token"
+  sensitive = true
+}
+
 provider "rabbitmq" {
   endpoint = "http://127.0.0.1:15672"
   username = "rabbitmq"
@@ -21,4 +27,9 @@ provider "minio" {
   minio_server   = "localhost:9000"
   minio_password = "minioadmin"
   minio_user     = "minioadmin"
+}
+
+provider "vault" {
+  address = "http://127.0.0.1:8201"
+  token   = var.VAULT_ROOT_TOKEN
 }

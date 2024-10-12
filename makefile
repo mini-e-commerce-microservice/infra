@@ -59,5 +59,7 @@ run-vault:
 	docker compose -f vault.yml up -d
 
 run: run-otel run-rabbitmq run-minio run-redis run-vault
+	cd database && docker compose up -d
 
 stop: stop-kafka stop-otel stop-rabbitmq stop-minio stop-redis stop-vault
+	cd database && docker compose stop 

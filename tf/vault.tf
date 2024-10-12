@@ -6,7 +6,8 @@ resource "vault_mount" "kv" {
 }
 
 resource "vault_policy" "kv_reader" {
-  name = "kf-reader"
+  depends_on = [vault_mount.kv]
+  name       = "kv-reader"
 
   policy = <<EOT
 path "kv/*" {
@@ -15,9 +16,14 @@ path "kv/*" {
 EOT
 }
 
+output "kv_reader_token_output" {
+  value = vault_token.auth_service_token.id
+}
+
 resource "vault_token" "auth_service_token" {
-  policies = [vault_policy.kv_reader.name]
-  ttl      = "72000h"
+  depends_on      = [vault_policy.kv_reader]
+  policies        = [vault_policy.kv_reader.name]
+  ttl             = "72000h"
   renew_min_lease = 43200
   renew_increment = 86400
   metadata = {
@@ -26,6 +32,7 @@ resource "vault_token" "auth_service_token" {
 }
 
 resource "vault_kv_secret_v2" "auth-service" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "auth-service"
   cas                 = 1
@@ -48,6 +55,7 @@ resource "vault_kv_secret_v2" "auth-service" {
 }
 
 resource "vault_kv_secret_v2" "jwt" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "jwt"
   cas                 = 1
@@ -55,17 +63,17 @@ resource "vault_kv_secret_v2" "jwt" {
   data_json = jsonencode(
     {
       access_token = {
-        expired_at = "10"
+        expired_at = 10
         key        = "Q39Sl6Sg9aYOz6OQ0VyuiC5j6EhH5s9T"
       },
       otp_usecase = {
-        expired_at = "5"
+        expired_at = 5
         key        = "Q39Sl6Sg9aYOz6OQ0VyuiC5j6EhH5s9T"
       },
       refresh_token = {
-        expired_at             = "43200"
+        expired_at             = 43200
         key                    = "Q39Sl6Sg9aYOz6OQ0VyuiC5j6EhH5s9T"
-        remember_me_expired_at = "525600"
+        remember_me_expired_at = 525600
       }
     }
   )
@@ -78,6 +86,7 @@ resource "vault_kv_secret_v2" "jwt" {
 }
 
 resource "vault_kv_secret_v2" "kafka" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "kafka"
   cas                 = 1
@@ -99,6 +108,7 @@ resource "vault_kv_secret_v2" "kafka" {
 }
 
 resource "vault_kv_secret_v2" "mailer" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "mailer"
   cas                 = 1
@@ -129,6 +139,7 @@ resource "vault_kv_secret_v2" "mailer" {
 }
 
 resource "vault_kv_secret_v2" "minio" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "minio"
   cas                 = 1
@@ -151,6 +162,7 @@ resource "vault_kv_secret_v2" "minio" {
 }
 
 resource "vault_kv_secret_v2" "otel" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "otel"
   cas                 = 1
@@ -171,6 +183,7 @@ resource "vault_kv_secret_v2" "otel" {
 }
 
 resource "vault_kv_secret_v2" "product-service" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "product-service"
   cas                 = 1
@@ -193,6 +206,7 @@ resource "vault_kv_secret_v2" "product-service" {
 }
 
 resource "vault_kv_secret_v2" "rabbitmq" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "rabbitmq"
   cas                 = 1
@@ -226,6 +240,7 @@ resource "vault_kv_secret_v2" "rabbitmq" {
 }
 
 resource "vault_kv_secret_v2" "redis" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "redis"
   cas                 = 1
@@ -246,6 +261,7 @@ resource "vault_kv_secret_v2" "redis" {
 }
 
 resource "vault_kv_secret_v2" "user-service" {
+  depends_on          = [vault_mount.kv]
   mount               = "kv"
   name                = "user-service"
   cas                 = 1

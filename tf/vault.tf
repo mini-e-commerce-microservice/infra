@@ -39,11 +39,12 @@ resource "vault_kv_secret_v2" "auth-service" {
   delete_all_versions = true
   data_json = jsonencode(
     {
-      APP_MODE          = "dev",
-      APP_PORT          = 3002,
-      DATABASE_DSN      = "postgres://auth_svc_user:auth_svc@127.0.0.1:5434/auth_svc_db?sslmode=disable",
-      REDIS_CLIENT_NAME = "auth-service",
-      TRACER_NAME       = "auth-service"
+      app_mode          = "dev",
+      app_port          = 3002,
+      database_dsn      = "postgres://auth_svc_user:auth_svc@127.0.0.1:5434/auth_svc_db?sslmode=disable",
+      redis_client_name = "auth-service",
+      tracer_name       = "auth-service"
+      consumer_user_data_group_1 = "auth.service.consumer.user.data.group1"
     }
   )
   custom_metadata {
@@ -95,7 +96,8 @@ resource "vault_kv_secret_v2" "kafka" {
     {
       host = "localhost:9092",
       topic = {
-        cdc_user_table = "usersvc.public.users"
+        cdc_user_table = "usersvc.public.users",
+        cdc_product_outbox_table = "productsvc.public.outbox"
       }
     }
   )
@@ -146,10 +148,10 @@ resource "vault_kv_secret_v2" "minio" {
   delete_all_versions = true
   data_json = jsonencode(
     {
-      "access_id"         = "5yy3BY1e98t57rmJ",
-      "endpoint"          = "localhost=9000",
+      "access_id"         = "j2q1KA3rvhBveywO",
+      "endpoint"          = "localhost:9000",
       "private_bucket"    = "private",
-      "secret_access_key" = "IOMMuxVEpV4odgtZQrGDGF17sOfbapx4",
+      "secret_access_key" = "DNVNfrN5HSRQg6l36ayqfg5yRRmtmW4F",
       "use_ssl"           = false
     }
   )
@@ -190,11 +192,11 @@ resource "vault_kv_secret_v2" "product-service" {
   delete_all_versions = true
   data_json = jsonencode(
     {
-      "APP_MODE"          = "dev",
-      "APP_PORT"          = 3003,
-      "DATABASE_DSN"      = "postgres://product_svc_user:product_svc@127.0.0.1:5435/product_svc_db?sslmode=disable",
-      "REDIS_CLIENT_NAME" = "product-service",
-      "TRACER_NAME"       = "product-service"
+      "app_mode"          = "dev",
+      "app_port"          = 3003,
+      "database_dsn"      = "postgres://product_svc_user:product_svc@127.0.0.1:5435/product_svc_db?sslmode=disable",
+      "redis_client_name" = "product-service",
+      "tracer_name"       = "product-service"
     }
   )
   custom_metadata {
@@ -268,10 +270,10 @@ resource "vault_kv_secret_v2" "user-service" {
   delete_all_versions = true
   data_json = jsonencode(
     {
-      "APP_MODE"     = "dev",
-      "APP_PORT"     = 3001,
-      "DATABASE_DSN" = "postgres://user-svc:user-svc@localhost:5433/user-svc?sslmode=disable",
-      "TRACER_NAME"  = "user-service"
+      "app_mode"     = "dev",
+      "app_port"     = 3001,
+      "database_dsn" = "postgres://user_svc_user:user_svc@127.0.0.1:5433/user_svc_db?sslmode=disable",
+      "tracer_name"  = "user-service"
     }
   )
   custom_metadata {

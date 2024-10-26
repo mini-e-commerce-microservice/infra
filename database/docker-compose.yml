@@ -63,7 +63,6 @@ services:
       
   user_svc:
     image: debezium/postgres:16-alpine
-    restart: always
     ports:
       - 5433:5432
     healthcheck:
@@ -82,7 +81,6 @@ services:
   
   auth_svc:
     image: debezium/postgres:16-alpine
-    restart: always
     ports:
       - 5434:5432
     healthcheck:
@@ -101,7 +99,6 @@ services:
       
   product_svc:
     image: debezium/postgres:16-alpine
-    restart: always
     ports:
       - 5435:5432
     healthcheck:
@@ -117,11 +114,30 @@ services:
       - product_svc_db_data:/var/lib/postgresql/data
     networks:
       - mini-ecommerce-db-network
+  
+  order_svc:
+    image: debezium/postgres:16-alpine
+    ports:
+      - 5436:5432
+    healthcheck:
+      test: "pg_isready -U order_svc_user -d order_svc_db"
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    environment:
+      POSTGRES_DB: order_svc_db
+      POSTGRES_USER: order_svc_user
+      POSTGRES_PASSWORD: order_svc
+    volumes:
+      - order_svc_db_data:/var/lib/postgresql/data
+    networks:
+      - mini-ecommerce-db-network
 
 volumes:
   user_svc_db_data:
   auth_svc_db_data:
   product_svc_db_data:
+  order_svc_db_data:
 
 networks:
   mini-ecommerce-db-network:

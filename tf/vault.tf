@@ -39,11 +39,11 @@ resource "vault_kv_secret_v2" "auth-service" {
   delete_all_versions = true
   data_json = jsonencode(
     {
-      app_mode          = "dev",
-      app_port          = 3002,
-      database_dsn      = "postgres://auth_svc_user:auth_svc@127.0.0.1:5434/auth_svc_db?sslmode=disable",
-      redis_client_name = "auth-service",
-      tracer_name       = "auth-service"
+      app_mode                   = "dev",
+      app_port                   = 3002,
+      database_dsn               = "postgres://auth_svc_user:auth_svc@127.0.0.1:5434/auth_svc_db?sslmode=disable",
+      redis_client_name          = "auth-service",
+      tracer_name                = "auth-service"
       consumer_user_data_group_1 = "auth.service.consumer.user.data.group1"
     }
   )
@@ -96,8 +96,18 @@ resource "vault_kv_secret_v2" "kafka" {
     {
       host = "localhost:9092",
       topic = {
-        cdc_user_table = "usersvc.public.users",
-        cdc_product_outbox_table = "productsvc.public.outbox"
+        usersvc_public_users = {
+          name = "usersvc.public.users",
+          consumer_group = {
+            authsvc = "usersvc_public_users_group_authsvc"
+          }
+        },
+        productsvc_public_outbox = {
+          name = "productsvc.public.outbox",
+          consumer_group = {
+            ordersvc = "productsvc_public_outbox_group_authsvc"
+          }
+        }
       }
     }
   )
@@ -284,3 +294,24 @@ resource "vault_kv_secret_v2" "user-service" {
   }
 }
 
+resource "vault_kv_secret_v2" "order-service" {
+  depends_on          = [vault_mount.kv]
+  mount               = "kv"
+  name                = "order-service"
+  cas                 = 1
+  delete_all_versions = true
+  data_json = jsonencode(
+    {
+      "app_mode"     = "dev",
+      "app_port"     = 3004,
+      "database_dsn" = "postgres://order_svc_user:order_svc@127.0.0.1:5436/order_svc_db?sslmode=disable",
+      "tracer_name"  = "order-service"
+    }
+  )
+  custom_metadata {
+    max_versions = 5
+    data = {
+      email = "ibanrama29@gmail.com",
+    }
+  }
+}

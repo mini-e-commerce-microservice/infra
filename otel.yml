@@ -4,7 +4,6 @@ services:
 
   jaeger-all-in-one:
     image: jaegertracing/all-in-one:latest
-    restart: always
     ports:
       - "16686:16686"
       - "14268"
@@ -14,7 +13,6 @@ services:
     image: openzipkin/zipkin:latest
     environment:
       - JAVA_OPTS=-Xms1024m -Xmx1024m -XX:+ExitOnOutOfMemoryError
-    restart: always
     ports:
       - "9411:9411"
     networks:
@@ -22,7 +20,6 @@ services:
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib
-    restart: always
     command: [ "--config=/providerconf/otel-config.yaml", "${OTELCOL_ARGS}" ]
     volumes:
       - "./otel-config:/providerconf"

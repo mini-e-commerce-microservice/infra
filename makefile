@@ -1,6 +1,6 @@
 CONFIG_FILE=/etc/kafka/kafka-config/config.properties
 
-BOOTSTRAP_SERVER=localhost:8003
+BOOTSTRAP_SERVER=localhost:29092
 
 TOPIC_NAME=testtopic
 
@@ -17,9 +17,8 @@ create-topic:
 		--command-config $(CONFIG_FILE)
 
 list-topics:
-	docker exec -it kafka_1 kafka-topics --list \
-		--bootstrap-server $(BOOTSTRAP_SERVER) \
-		--command-config $(CONFIG_FILE)
+	docker exec -it broker kafka-topics --list \
+		--bootstrap-server $(BOOTSTRAP_SERVER)
 
 delete-topic:
 	docker exec -it kafka_1 kafka-topics --delete \

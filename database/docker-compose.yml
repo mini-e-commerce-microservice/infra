@@ -132,12 +132,31 @@ services:
       - order_svc_db_data:/var/lib/postgresql/data
     networks:
       - mini-ecommerce-db-network
+  
+  payment_svc:
+    image: debezium/postgres:16-alpine
+    ports:
+      - 5437:5432
+    healthcheck:
+      test: "pg_isready -U payment_svc_user -d payment_svc_db"
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    environment:
+      POSTGRES_DB: payment_svc_db
+      POSTGRES_USER: payment_svc_user
+      POSTGRES_PASSWORD: payment_svc
+    volumes:
+      - payment_svc_db_data:/var/lib/postgresql/data
+    networks:
+      - mini-ecommerce-db-network
 
 volumes:
   user_svc_db_data:
   auth_svc_db_data:
   product_svc_db_data:
   order_svc_db_data:
+  payment_svc_db_data:
 
 networks:
   mini-ecommerce-db-network:

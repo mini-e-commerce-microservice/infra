@@ -107,7 +107,40 @@ resource "vault_kv_secret_v2" "kafka" {
           consumer_group = {
             ordersvc = "productsvc_public_outbox_group_authsvc"
           }
+        },
+        order_saga = {
+          aggregate_payment_request = {
+            name = "payment.request",
+            consumer_group = {
+              paymentsvc = "paymentsvc_aggregate_payment_request_group"
+            }
+          },
+          aggregate_payment_response = {
+            name = "payment.response",
+            consumer_group = {
+              ordersvc = "ordersvc_aggregate_payment_response_group"
+            }
+          },
+          aggregate_shipment_request = {
+            name = "shipment.request",
+            consumer_group = {
+              shipmentsvc = "shipmentsvc_aggregate_shipment_request_group"
+            }
+          },
+          aggregate_shipment_response = {
+            name = "shipment.response",
+            consumer_group = {
+              ordersvc = "ordersvc_aggregate_shipment_response_group"
+            }
+          },
+          aggregate_update_product_qty = {
+            name = "updateProductQTY.request",
+            consumer_group = {
+              productsvc = "productsvc_aggregate_update_product_qty_group"
+            }
+          }
         }
+
       }
     }
   )
@@ -306,6 +339,35 @@ resource "vault_kv_secret_v2" "order-service" {
       "app_port"     = 3004,
       "database_dsn" = "postgres://order_svc_user:order_svc@127.0.0.1:5436/order_svc_db?sslmode=disable",
       "tracer_name"  = "order-service"
+    }
+  )
+  custom_metadata {
+    max_versions = 5
+    data = {
+      email = "ibanrama29@gmail.com",
+    }
+  }
+}
+
+resource "vault_kv_secret_v2" "payment-service" {
+  depends_on          = [vault_mount.kv]
+  mount               = "kv"
+  name                = "payment-service"
+  cas                 = 1
+  delete_all_versions = true
+  data_json = jsonencode(
+    {
+      "app_mode"     = "dev",
+      "app_port"     = 3005,
+      "database_dsn" = "postgres://payment_svc_user:payment_svc@127.0.0.1:5437/payment_svc_db?sslmode=disable",
+      "tracer_name"  = "payment-service",
+      "payment_gateway" = {
+        "midtrans" = {
+          merchant_id = "G156379518"
+          client_key  = "SB-Mid-client-Ka0p2hHzoc39XakT",
+          server_key  = "SB-Mid-server-LR5SazLSkB3wdU2MRwIpkXFp"
+        }
+      }
     }
   )
   custom_metadata {
